@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Sistema Solar</title>
+  <style>
+    body { 
+      margin: 0; 
+      overflow: hidden; 
+      background: black; 
+    }
+  </style>
+</head>
+<body>
+
+<!-- biblioteca 3D -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<script>
+
+// cena
+const scene = new THREE.Scene();
+
+// câmera
+const camera = new THREE.PerspectiveCamera(
+  75,
+  window.innerWidth / window.innerHeight,
+  0.1,
+  1000
+);
+
+// renderização
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+
+// luz (sol ilumina)
+const luz = new THREE.PointLight(0xffffff, 2);
+scene.add(luz);
+
+// sol (centro)
+const solGeometry = new THREE.SphereGeometry(2, 32, 32);
+const solMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+const sol = new THREE.Mesh(solGeometry, solMaterial);
+
+scene.add(sol);
+
+
+// terra
+const terraGeometry = new THREE.SphereGeometry(1, 32, 32);
+const terraMaterial = new THREE.MeshStandardMaterial({ color: 0x3399ff });
+const terra = new THREE.Mesh(terraGeometry, terraMaterial);
+
+// grupo (translação)
+const grupoTerra = new THREE.Group();
+grupoTerra.add(terra);
+scene.add(grupoTerra);
+
+// distância do sol
+terra.position.x = 6;
+
+
+// marte
+const marteGeometry = new THREE.SphereGeometry(0.8, 32, 32);
+const marteMaterial = new THREE.MeshStandardMaterial({ color: 0xff5533 });
+const marte = new THREE.Mesh(marteGeometry, marteMaterial);
+
+// grupo (translação)
+const grupoMarte = new THREE.Group();
+grupoMarte.add(marte);
+scene.add(grupoMarte);
+
+// distância do sol
+marte.position.x = 10;
+
+
+// posição da câmera
+camera.position.z = 15;
+
+
+// animação
+function animate() {
+  requestAnimationFrame(animate);
+
+  // rotação (gira no próprio eixo)
+  terra.rotation.y += 0.06;
+  marte.rotation.y += 0.015;
+
+  // translação (orbita o sol)
+  grupoTerra.rotation.y += 0.01;
+  grupoMarte.rotation.y += 0.008;
+
+  // renderiza
+  renderer.render(scene, camera);
+}
+
+// inicia animação
+animate();
+
+</script>
+
+</body>
+</html>
