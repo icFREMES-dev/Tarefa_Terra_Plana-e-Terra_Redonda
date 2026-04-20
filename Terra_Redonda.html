@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Terra Plana</title>
+  <style>
+    body { 
+      margin: 0; 
+      overflow: hidden; 
+      background: black; 
+    }
+  </style>
+</head>
+<body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<script>
+
+// cena
+const scene = new THREE.Scene();
+
+// câmera
+const camera = new THREE.PerspectiveCamera(
+  75,
+  window.innerWidth / window.innerHeight,
+  0.1,
+  1000
+);
+camera.position.z = 15;
+
+// render
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+
+// luz
+const luz = new THREE.PointLight(0xffffff, 2);
+scene.add(luz);
+scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+
+
+// sol
+const sol = new THREE.Mesh(
+  new THREE.SphereGeometry(2, 32, 32),
+  new THREE.MeshBasicMaterial({ color: 0xffff00 })
+);
+scene.add(sol);
+
+
+// TERRA 
+const materialTerra = new THREE.MeshBasicMaterial({
+  color: 0x33ccff,
+  side: THREE.DoubleSide
+});
+
+const terra = new THREE.Mesh(
+  new THREE.CircleGeometry(2, 32),
+  materialTerra
+);
+
+const grupoTerra = new THREE.Group();
+grupoTerra.add(terra);
+scene.add(grupoTerra);
+
+terra.position.x = 10;
+terra.rotation.x = 8;
+
+
+
+
+// planeta 1
+const planeta1 = new THREE.Mesh(
+  new THREE.SphereGeometry(0.7, 32, 32),
+  new THREE.MeshStandardMaterial({ color: 0xff0000 })
+);
+
+const grupo1 = new THREE.Group();
+grupo1.add(planeta1);
+scene.add(grupo1);
+
+planeta1.position.x = 5;
+
+
+// planeta 2
+const planeta2 = new THREE.Mesh(
+  new THREE.SphereGeometry(1.2, 32, 32),
+  new THREE.MeshStandardMaterial({ color: 0x00ff00 })
+);
+
+const grupo2 = new THREE.Group();
+grupo2.add(planeta2);
+scene.add(grupo2);
+
+planeta2.position.x = 13;
+
+
+// planeta 3
+const planeta3 = new THREE.Mesh(
+  new THREE.SphereGeometry(0.9, 32, 32),
+  new THREE.MeshStandardMaterial({ color: 0xff00ff })
+);
+
+const grupo3 = new THREE.Group();
+grupo3.add(planeta3);
+scene.add(grupo3);
+
+planeta3.position.x = 18;
+
+
+// ANIMAÇÃO
+
+function animate() {
+  requestAnimationFrame(animate);
+
+  // terra
+  terra.rotation.z += 0.08;
+  grupoTerra.rotation.y += 0.03;
+
+  // planeta 1
+  planeta1.rotation.y += 0.02;
+  grupo1.rotation.y += 0.015;
+
+  // planeta 2
+  planeta2.rotation.y += 0.015;
+  grupo2.rotation.y += 0.01;
+
+  // planeta 3
+  planeta3.rotation.y += 0.01;
+  grupo3.rotation.y += 0.008;
+
+  renderer.render(scene, camera);
+}
+
+animate();
